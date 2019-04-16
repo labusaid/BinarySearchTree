@@ -8,6 +8,7 @@
 
 #include <cstdio>
 #include <iosfwd>
+#include <string>
 
 // forward declaration of the template class binarySearchTree
 template<class DataType>
@@ -18,17 +19,24 @@ template <class DataType>
 class treeNode
 {
 	friend class binarySearchTree<DataType>;
-	// the rest of the treeNode class declaration goes here
+private:
+	<DataType> key;
+	treeNode<DataType> leftNode;
+	treeNode<DataType> rightNode;
+public:
+	std::ostream &operator<< (std::ostream &out);
 };
 
 // binarySearchTree class
 template <class DataType>
 class binarySearchTree
 {
+private:
+	treeNode<DataType> rootNode = nullptr;
+public:
 	bool empty() const;
 	std::size_t size() const;
 	void print() const;
-	std::ostream &operator<<(std::ostream &out);
 	void debug(std::ostream &out) const;
 	bool find(const DataType &searchItem, void (*foundNode)(const DataType&));
 	bool erase(const DataType &deleteItem);
