@@ -20,9 +20,10 @@ class treeNode
 {
 	friend class binarySearchTree<DataType>;
 private:
-	<DataType> key;
-	treeNode<DataType> leftNode;
-	treeNode<DataType> rightNode;
+	DataType key;
+	treeNode<DataType> *parentNode;
+	treeNode<DataType> *leftNode;
+	treeNode<DataType> *rightNode;
 public:
 	std::ostream &operator<< (std::ostream &out);
 };
@@ -31,8 +32,9 @@ public:
 template <class DataType>
 class binarySearchTree
 {
+	friend class treeNode<DataType>;
 private:
-	treeNode<DataType> rootNode = nullptr;
+	treeNode<DataType> *rootNode = nullptr;
 public:
 	bool empty() const;
 	std::size_t size() const;
