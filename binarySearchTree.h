@@ -21,10 +21,11 @@ class treeNode
 	friend class binarySearchTree<DataType>;
 private:
 	DataType key;
-	treeNode<DataType> *parentNode;
-	treeNode<DataType> *leftNode;
-	treeNode<DataType> *rightNode;
+	treeNode<DataType> *parentNode = nullptr;
+	treeNode<DataType> *leftNode = nullptr;
+	treeNode<DataType> *rightNode = nullptr;
 public:
+	treeNode(DataType key, treeNode<DataType> *parentNode);
 	std::ostream &operator<< (std::ostream &out);
 };
 
@@ -45,7 +46,10 @@ public:
 	void insert(const DataType &newItem);
 	void insert(const DataType &newItem, void (*duplicateItemFound)(DataType &existingItem, const DataType &newItem));
 	void update(DataType &exsitingItem, const DataType &newItem);
-	void traverse(void (*itemFound)(const DataType& foundItem)) const;
+	void traverse(treeNode<DataType> *node ,void (*itemFound)(const DataType& foundItem)) const;
 };
+
+template<class DataType>
+treeNode<DataType>::treeNode(DataType key, treeNode<DataType> *parentNode):key(key), parentNode(parentNode) {}
 
 #endif //BINARYSEARCHTREE_BINARYSEARCHTREE_H
