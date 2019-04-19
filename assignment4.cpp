@@ -224,9 +224,9 @@ void binarySearchTree<DataType>::update(DataType &existingItem, const DataType &
 		return;
 	}
 	else if (existingItem < node->key) {
-		update(existingItem, newItem, existingItem.leftNode);
+		update(existingItem, newItem, node->leftNode);
 	}
-	else if (existingItem > existingItem.key) {
+	else if (existingItem > node->key) {
 		update(existingItem, newItem, node->rightNode);
 	}
 }
