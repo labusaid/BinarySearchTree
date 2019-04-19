@@ -15,7 +15,6 @@ treeNode<DataType>::treeNode(DataType newKey) {
 //TreeNode Destructor
 template<class DataType>
 treeNode<DataType>::~treeNode() {
-	delete(key);
 	delete(leftNode);
 	delete(rightNode);
 }
@@ -26,8 +25,33 @@ template<class DataType>
 binarySearchTree<DataType>::binarySearchTree() = default;
 
 //Destructor
-//template<class DataType>
-//binarySearchTree<DataType>::~binarySearchTree() = default;
+template<class DataType>
+binarySearchTree<DataType>::~binarySearchTree() {
+	deleteAll();
+}
+
+//Deletes all nodes in tree
+template<class DataType>
+void binarySearchTree<DataType>::deleteAll() {
+	deleteAll(rootNode);
+	rootNode = nullptr;
+}
+
+//Deletes nodes recursively from passed node
+template<class DataType>
+void binarySearchTree<DataType>::deleteAll(treeNode<DataType> *node) {
+	if (node != nullptr)
+	{
+		// delete all nodes to the left
+		deleteAll(node->leftNode);
+
+		// delete all nodes to the right
+		deleteAll(node->rightNode);
+
+		// delete the node now
+		delete node;
+	}
+}
 
 //Returns if tree contains no nodes
 template<class DataType>
@@ -41,31 +65,31 @@ std::size_t binarySearchTree<DataType>::size() const {
 	if (rootNode == nullptr) {
 		return 0;
 	}
-	return sizeRecursive(rootNode);
+	return size(rootNode);
 }
 
 template<class DataType>
-std::size_t binarySearchTree<DataType>::sizeRecursive(treeNode<DataType> *node) const {
+std::size_t binarySearchTree<DataType>::size(treeNode<DataType> *node) const {
 	if (node == nullptr) {
 		return 0;
 	}
-	return (sizeRecursive(node->leftNode) + sizeRecursive(node->rightNode) + 1);
+	return (size(node->leftNode) + size(node->rightNode) + 1);
 }
 
 //Prints tree keys inOrder
 template<class DataType>
 void binarySearchTree<DataType>::print() const {
-	printRecursive(rootNode);
+	print(rootNode);
 }
 
 template<class DataType>
-void binarySearchTree<DataType>::printRecursive(treeNode<DataType> *node) const {
+void binarySearchTree<DataType>::print(treeNode<DataType> *node) const {
 	if (node == nullptr) {
 		return;
 	}
-    printRecursive(node->leftNode);
+	print(node->leftNode);
 	std::cout << node->key << std::endl;
-    printRecursive(node->rightNode);
+	print(node->rightNode);
 }
 
 //Prints tree inOrder along with left and right pointers
@@ -76,8 +100,32 @@ void binarySearchTree<DataType>::debug(std::ostream &out) const {
 
 //Locates node and calls foundNode passing the located node
 template<class DataType>
+bool binarySearchTree<DataType>::find(const DataType &searchItem) {
+	return (find(searchItem, rootNode));
+}
+
+template<class DataType>
 bool binarySearchTree<DataType>::find(const DataType &searchItem, void (*foundNode)(const DataType &)) {
-	return false;
+	return (find(searchItem, rootNode));
+}
+
+template<class DataType>
+bool binarySearchTree<DataType>::find(const DataType &searchItem, treeNode<DataType> *node) {
+	if (searchItem == node->key) {
+		return true;
+	}
+	else if (searchItem < node->key) {
+		if (node->leftNode == nullptr) {
+			return false;
+		}
+		find(searchItem, node->leftNode);
+	}
+	else if (searchItem > node->key) {
+		if (node->rightNode == nullptr) {
+			return false;
+		}
+		find(searchItem, node->rightNode);
+	}
 }
 
 //Removes a node from the tree
@@ -93,12 +141,12 @@ void binarySearchTree<DataType>::insert(const DataType &newItem) {
 		rootNode = new treeNode<DataType>(newItem);
 	}
 	else {
-		insertRecursive(newItem, *rootNode);
+		insert(newItem, *rootNode);
 	}
 }
 
 template<class DataType>
-void binarySearchTree<DataType>::insertRecursive(const DataType &newItem, treeNode<DataType> &currentNode) {
+void binarySearchTree<DataType>::insert(const DataType &newItem, treeNode<DataType> &currentNode) {
 	if (newItem == currentNode.key) {
 //		update(currentNode, newItem);
 	}
@@ -107,7 +155,7 @@ void binarySearchTree<DataType>::insertRecursive(const DataType &newItem, treeNo
 			currentNode.leftNode = new treeNode<DataType>(newItem);
 		}
 		else {
-			insertRecursive(newItem, *currentNode.leftNode);
+			insert(newItem, *currentNode.leftNode);
 		}
 	}
 	else if (newItem > currentNode.key) {
@@ -115,7 +163,7 @@ void binarySearchTree<DataType>::insertRecursive(const DataType &newItem, treeNo
 			currentNode.rightNode = new treeNode<DataType>(newItem);
 		}
 		else {
-			insertRecursive(newItem, *currentNode.rightNode);
+			insert(newItem, *currentNode.rightNode);
 		}
 	}
 }
@@ -135,29 +183,23 @@ void binarySearchTree<DataType>::update(DataType &exsitingItem, const DataType &
 //Calls itemFound for each item in the tree
 template<class DataType>
 void binarySearchTree<DataType>::traverse(void (*itemFound)(const DataType &)) const {
-	traverseRecursive(rootNode, *itemFound);
+	traverse(rootNode, *itemFound);
 }
 
 //Used by traverse function
 template<class DataType>
-void binarySearchTree<DataType>::traverseRecursive(treeNode<DataType> *node ,void (*itemFound)(const DataType &)) const {
+void binarySearchTree<DataType>::traverse(treeNode<DataType> *node, void (*itemFound)(const DataType &)) const {
     if (node == nullptr) {
         return;
     }
-    traverseRecursive(node->leftNode, *itemFound);
+	traverse(node->leftNode, *itemFound);
     itemFound(node->key);
-    traverseRecursive(node->rightNode, *itemFound);
-}
-
-//Used for debugging
-template<class DataType>
-void testFunc(const DataType *itemFound) {
-	std::cout << "What?" << std::endl;
+	traverse(node->rightNode, *itemFound);
 }
 
 //Main
 int main() {
-	auto testTree = new binarySearchTree<int>;
+	binarySearchTree<int> *testTree = new binarySearchTree<int>;
 	testTree->insert(5);
 	testTree->insert(10);
 	testTree->insert(1);
@@ -165,6 +207,9 @@ int main() {
 	testTree->insert(4);
 	testTree->insert(9);
 	testTree->print();
-	std::cout << testTree->size() << std::endl;
+	std::cout << "items: " << testTree->size() << std::endl;
+	std::cout << "found 10: " << testTree->find(10) << std::endl;
+	std::cout << "found 8: " << testTree->find(8) << std::endl;
+//	delete(testTree);
 	return 0;
 }

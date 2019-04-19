@@ -38,27 +38,33 @@ private:
 	treeNode<DataType> *rootNode = nullptr;
 public:
 	binarySearchTree();
-//	virtual ~binarySearchTree();
+	virtual ~binarySearchTree();
+
+	void deleteAll();
+	void deleteAll(treeNode<DataType> *node);
 
 	bool empty() const;
 	std::size_t size() const;
-	std::size_t sizeRecursive(treeNode<DataType> *node) const;
+	std::size_t size(treeNode<DataType> *node) const;
 
 	void print() const;
-	void printRecursive(treeNode<DataType> *node) const;
-
+	void print(treeNode<DataType> *node) const;
 	void debug(std::ostream &out) const;
+
+	bool find(const DataType &searchItem);
+	bool find(const DataType &searchItem, treeNode<DataType> *node);
 	bool find(const DataType &searchItem, void (*foundNode)(const DataType&));
+
 	bool erase(const DataType &deleteItem);
 
 	void insert(const DataType &newItem);
-	void insertRecursive(const DataType &newItem, treeNode<DataType> &currentNode);
+	void insert(const DataType &newItem, treeNode<DataType> &currentNode);
 	void insert(const DataType &newItem, void (*duplicateItemFound)(DataType &existingItem, const DataType &newItem));
 
 	void update(DataType &exsitingItem, const DataType &newItem);
 
 	void traverse(void (*itemFound)(const DataType& foundItem)) const;
-	void traverseRecursive(treeNode<DataType> *node ,void (*itemFound)(const DataType& foundItem)) const;
+	void traverse(treeNode<DataType> *node, void (*itemFound)(const DataType &foundItem)) const;
 };
 
 #endif //BINARYSEARCHTREE_BINARYSEARCHTREE_H
