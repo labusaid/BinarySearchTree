@@ -50,18 +50,21 @@ public:
 	void print() const;
 	void print(treeNode<DataType> *node) const;
 	void debug(std::ostream &out) const;
+	void debug(std::ostream &out, treeNode<DataType> *node) const;
 
 	bool find(const DataType &searchItem);
 	bool find(const DataType &searchItem, treeNode<DataType> *node);
 	bool find(const DataType &searchItem, void (*foundNode)(const DataType&));
 
 	bool erase(const DataType &deleteItem);
+	bool erase(const DataType &deleteItem, treeNode<DataType> *node);
 
 	void insert(const DataType &newItem);
 	void insert(const DataType &newItem, treeNode<DataType> &currentNode);
 	void insert(const DataType &newItem, void (*duplicateItemFound)(DataType &existingItem, const DataType &newItem));
 
-	void update(DataType &exsitingItem, const DataType &newItem);
+	void update(DataType &existingItem, const DataType &newItem);
+	void update(DataType &existingItem, const DataType &newItem, treeNode<DataType> *node);
 
 	void traverse(void (*itemFound)(const DataType& foundItem)) const;
 	void traverse(treeNode<DataType> *node, void (*itemFound)(const DataType &foundItem)) const;
