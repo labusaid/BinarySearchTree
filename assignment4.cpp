@@ -148,7 +148,8 @@ bool binarySearchTree<DataType>::erase(const DataType &deleteItem) {
 template<class DataType>
 bool binarySearchTree<DataType>::erase(const DataType &deleteItem, treeNode<DataType> *node) {
 	if (deleteItem == node->key) {
-		delete(node);
+		//TODO: erase pointers towards node
+//		delete(node);
 		return true;
 	}
 	else if (deleteItem< node->key) {
